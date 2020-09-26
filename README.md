@@ -26,7 +26,7 @@ V1 Faster internet speed display<br>
 <img src="flixwalkthrough.gif" width=250><br>
 
 V2 Slower internet speed display + Heterogeneous Layouts inside RecyclerView<br>
-<img src="flixwalkthroughupdate.gif" width=250><br>
+<img src="flixwalkthroughupdate.gif" width=550><br>
 
 ### Notes
 Imported custom fonts
