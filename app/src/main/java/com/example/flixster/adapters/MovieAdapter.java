@@ -22,7 +22,11 @@ import java.util.List;
 
 
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private  static  int LESS_POPULAR = 0;
+    private static int MORE_POPULAR = 1;
+
 
     Context context;
     List<Movie> movies;
@@ -35,63 +39,69 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
 //    @Override
-//    public int getItemViewType(Movie movie) {
-//        if (movie.getPopularity() >= 7.5) {
-//            return 1;
-//        } else if (movie.getPopularity() < 7.5) {
-//            return 0;
-//        }
-//        return -1;
-//    }
+
+
 
 
 
     // Usually involves inflating a layout from XML and returning the holder
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("MovieAdapter", "onCreateViewHolder");
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-        return new ViewHolder(movieView);
-    }
+//    @NonNull
 //    @Override
 //    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//
-//
-//        switch (viewType) {
-//            case 1:
-//                View movieViewPopular = LayoutInflater.from(context).inflate(R.layout.item_movie_popular, parent, false);
-//                ViewHolder viewHolder = new ViewHolder(movieViewPopular);
-//                return viewHolder;
-//            case 0:
-//                View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-//                ViewHolder viewHolderTwo = new ViewHolder(movieView);
-//                return viewHolderTwo;
-//            default:
-//                View movieViewTwo = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-//                ViewHolder viewHolderThree = new ViewHolder(movieViewTwo);
-//                return viewHolderThree;
-//        }
-//
+//        Log.d("MovieAdapter", "onCreateViewHolder");
+//        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+//        return new ViewHolder(movieView);
 //    }
 
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("MovieAdapter", "onCreateViewHolder");
+        View movieView;
+        if (viewType == LESS_POPULAR) {
+            movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+            return new ViewHolder(movieView);
+
+        }
+        else {
+            movieView = LayoutInflater.from(context).inflate(R.layout.item_movie_popular, parent, false);
+            return new PopularViewHolder(movieView);
+
+        }
+
+    }
 
 
 
 //     Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.d("MovieAdapter", "onBindViewHolder " + position);
         // Get the movie at the passed in position
         Movie movie = movies.get(position);
         // Bind the movie data into the View Holder
-        holder.bind(movie);
+        if (getItemViewType(position) == LESS_POPULAR) {
+            ((ViewHolder) holder).bind(movie);
+        }
+        else {
+            ((PopularViewHolder) holder).bind(movie);
+        }
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    public int getItemViewType(int position) {
+        Movie movie = movies.get(position);
+        if (movie.getPopularity() >= 7.5) {
+            return MORE_POPULAR;
+        }
+        else {
+            return LESS_POPULAR;
+        }
     }
 
 
@@ -121,18 +131,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 imageUrl = movie.getBackdropPath();
             }
 
-            // If movie is popular
-            else if (movie.getPopularity() >= 7.5) {
-                // then imageUrl = backdrop image
-                imageUrl = movie.getBackdropPath();
-            }
-
-
             else {
-                // else imageUrl = poster image
+                // then imageUrl = backdrop image
                 imageUrl = movie.getPosterPath();
-
             }
+
+
+
 
             int radius = 20; // corner radius, higher value = more rounded
 
@@ -144,6 +149,33 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                     .transform(new RoundedCorners(radius))
                     .override(342,513)
                     .into(ivPoster);
+
+        }
+    }
+
+
+
+    public class PopularViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView backdrop;
+
+        public PopularViewHolder(@NonNull View itemView) {
+            super(itemView);
+            backdrop = itemView.findViewById(R.id.ivPoster);
+        }
+
+        public void bind(Movie movie) {
+            int radius = 20; // corner radius, higher value = more rounded
+
+            // Placeholder and error images
+            Glide
+                    .with(context)
+                    .load(movie.getBackdropPath())
+                    .placeholder(R.drawable.progress_animation)
+                    .transform(new RoundedCorners(radius))
+                    .override(342,513)
+                    .into(backdrop);
+
 
         }
     }
