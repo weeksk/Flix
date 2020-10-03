@@ -1,15 +1,4 @@
-<!--<resources>-->
-<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
-<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-<!--        <item name="colorAccent">@color/colorAccent</item>-->
-<!--    </style>-->
 
-<!--    -->
-
-<!--</resources>-->
 
 <!--Modified action bar-->
 <resources>
@@ -17,6 +6,8 @@
     <!-- Define your colors in `res/values/colors.xml` -->
     <color name="simple_black">#000000</color>
     <color name="primary_white">#FFFFFF</color>
+    <color name="red">#E50914</color>
+
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
@@ -46,4 +37,10 @@
         <item name="android:textColor">@color/primary_white</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlActivated">@color/red</item>
+
+    </style>
+
 </resources>
+
